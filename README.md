@@ -1,10 +1,12 @@
-## Potluck on the command line!
+# Potluck on the command line!
 
-Because I sometimes don't want to open a browser.
+## Installation:
 
-## Directions:
+1) Get the executable. You can run `pip install Potlcuk`, and you should be good to go.
 
-1) Make a `~/.potluck_config` file and a `.potluck_cache` file. In the `~/.potluck_config` file, put your potluck email on the first line and password on the second line.
+If that gives you trouble, or you want to install from the source, clone the repo, `cd` into the directory, and run `python setup.py install`.
+
+2) Make a `~/.potluck_config` file and a `.potluck_cache` file. In the `~/.potluck_config` file, put your potluck email on the first line and password on the second line.
 
 For example:
 
@@ -13,7 +15,6 @@ me@my_email_provider.com
 password
 ```
 
-2) Download this script (the `potluck` file is the executable).
 3) Enjoy potluck in the terminal.
 
 ## Options
@@ -26,6 +27,6 @@ The `-o {N}` option opens the corresponding item in your browser.
 
 So, if the optionless command returned this:
 
-![](http://f.cl.ly/items/0s3y2y2u3B0Y1G2k1Y3o/Screen%20Shot%202013-09-22%20at%202.00.33%20AM.png)
+![](http://f.cl.ly/items/39142o2g2y1v110M2Q1t/Screen%20Shot%202013-09-22%20at%202.12.05%20AM.png)
 
-Then running `potluck -o 26` would open the potluck room for the *The 20 Smartest Things Jeff Bezos Has Ever Said* topic.
+Then running `potluck -o 26` would open the potluck room for the *new Huge totes* topic.
