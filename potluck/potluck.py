@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-import json, webbrowser, os, commands, pprint, ast, requests
+import json, webbrowser, requests, os
+from termcolor import colored
 
 class Potluck():
     def __init__(self):
@@ -61,16 +62,35 @@ class Potluck():
         self.rooms = response
 
 
+    def open(self, roomNumber):
+        import pdb
+        pdb.set_trace()
+        if not len(self.rooms):
+            print "Error"
+            return
+
+        roomNumber = roomNumber + 1
+        room = self.rooms[roomNumber]
+
+
+
     def print_output(self):
         output = []
 
         for idx, room in enumerate(self.rooms):
             topic = room.get('topic')
             output += topic
-            if idx > 8:
-                print "%s - %s" % (idx + 1, topic)
+            output_string = ''
+            if idx <= 8:
+                prefixed_space = ' '
             else:
-                print " %s - %s" % (idx + 1, topic)
+                prefixed_space = ''
+            output_string = "%s%s - %s" % (prefixed_space, idx + 1, topic)
+
+            if room.get('unread'):
+                output_string = colored(output_string, 'green')
+
+            print output_string
 
 
 
