@@ -1,21 +1,32 @@
 #!/usr/bin/env python
 
+from argparse import ArgumentParser
+
 import json, webbrowser, requests, os
 from termcolor import colored
 
 class Potluck():
+
+    def environment(self):
+        """Parse any command line arguments."""
+        parser = ArgumentParser()
+        parser.add_argument('-o', nargs='+', help="Get information for a domain name.")
+        args = parser.parse_args()
+        return args
+
     def __init__(self):
         self.auth_info = {}
         self.extra_headers = {}
         self.rooms = []
         self.base_route = 'https://www.potluck.it'
         self.potluck_config_file_name = '.potluck_config'
+        self.potluck_cache_file_name = '.potluck_cache'
+
 
     def _get_and_set_login_file_creds(self):
         home_dir = os.path.expanduser("~")
-        potluck_config_file_name = '.potluck_config'
-
-        with open(os.path.join(home_dir, potluck_config_file_name)) as f:
+        
+        with open(os.path.join(home_dir, self.potluck_config_file_name)) as f:
             content = f.readlines()
         
         if not len(content) is 2:
@@ -53,6 +64,7 @@ class Potluck():
 
         return True
 
+
     def get_set_rooms(self):
         request = requests.get("%s/rooms.json" % self.base_route, headers=self.extra_headers)
         if not request.ok:
@@ -60,18 +72,44 @@ class Potluck():
 
         response = json.loads(request.text)
         self.rooms = response
+        self.set_cached_rooms_data(json.dumps(self.rooms))
+
+
+    def set_cached_rooms_data(self, rooms):
+        home_dir = os.path.expanduser("~")
+        potluck_cache_file_name = '.potluck_cache'
+
+        with open(os.path.join(home_dir, potluck_cache_file_name), 'w+') as f:
+            f.write(rooms)
+
+
+    def get_cached_rooms_data(self):
+        home_dir = os.path.expanduser("~")
+        
+        with open(os.path.join(home_dir, self.potluck_cache_file_name)) as f:
+            content = f.readlines()
+
+        return content
 
 
     def open(self, roomNumber):
-        import pdb
-        pdb.set_trace()
-        if not len(self.rooms):
-            print "Error"
+        rooms = self.get_cached_rooms_data()
+        rooms = json.loads(rooms[0])
+
+        if not len(rooms):
+            print "Whoah - no cached rooms"
             return
 
-        roomNumber = roomNumber + 1
-        room = self.rooms[roomNumber]
+        roomNumber = roomNumber - 1
+        room = rooms[roomNumber]
 
+        if not room:
+            print "Something went wrong"
+            return
+
+        room_id = room.get('identifier')
+        url = "%s/rooms/%s" % (self.base_route, room_id)
+        webbrowser.open_new_tab(url)
 
 
     def print_output(self):
@@ -93,8 +131,12 @@ class Potluck():
             print output_string
 
 
-
-    def stir(self):
+    def stir(self, env):
+        if env.o:
+            room_to_open = int(env.o[0])
+            self.open(room_to_open)
+            return
+    
         logged_in = self.login()
 
         if logged_in:
@@ -102,6 +144,12 @@ class Potluck():
 
             if len(self.rooms):
                 self.print_output()
+
         else:
             print "Whoah - something went wrong."
             return;
+
+
+    def main(self):
+        args = self.environment()
+        self.stir(args)

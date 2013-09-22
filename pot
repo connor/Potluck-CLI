@@ -3,4 +3,4 @@
 from potluck import Potluck
 
 if __name__ == '__main__':
-    Potluck().stir()
+    Potluck().main()
