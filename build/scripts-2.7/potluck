@@ -1,6 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 
-from potluck import Potluck
+from _potluck import Potluck
 
 if __name__ == '__main__':
     Potluck().main()

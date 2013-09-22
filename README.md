@@ -13,7 +13,7 @@ me@my_email_provider.com
 password
 ```
 
-2) Download this script (the `pot` file is the executable).
+2) Download this script (the `potluck` file is the executable).
 3) Enjoy potluck in the terminal.
 
 ## Options
@@ -26,6 +26,6 @@ The `-o {N}` option opens the corresponding item in your browser.
 
 So, if the optionless command returned this:
 
-![](http://f.cl.ly/items/3v1o3N1s241T0v0D2E3V/Screen%20Shot%202013-09-22%20at%201.54.15%20AM.png)
+![](http://f.cl.ly/items/0s3y2y2u3B0Y1G2k1Y3o/Screen%20Shot%202013-09-22%20at%202.00.33%20AM.png)
 
-Then running `pot -o 26` would open the potluck room for the *The 20 Smartest Things Jeff Bezos Has Ever Said* topic.
+Then running `potluck -o 26` would open the potluck room for the *The 20 Smartest Things Jeff Bezos Has Ever Said* topic.

@@ -1,0 +1,22 @@
+Metadata-Version: 1.0
+Name: Potluck
+Version: 0.1
+Summary: A CLI for Potluck!
+Home-page: http://github.com/connor/potluck-cli
+Author: Connor Montgomery
+Author-email: c@cnnr.me
+License: MIT
+Description: UNKNOWN
+Platform: UNKNOWN
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Topic :: Scientific/Engineering :: Information Analysis
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Utilities
