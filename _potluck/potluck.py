@@ -49,6 +49,11 @@ class Potluck():
         self.extra_headers['X-Application-Name'] = "Potluck CLI, by Connor Montgomery"
 
 
+    def _login_if_needed(self):
+        if not len(self.extra_headers):
+            self.login()
+
+
     def login(self):
         auth_info = self._get_and_set_login_file_creds()
         if not auth_info:
@@ -134,6 +139,7 @@ class Potluck():
 
 
     def heart(self, roomNumber):
+        self._login_if_needed()
         rooms = self.get_cached_rooms_data()
         rooms = json.loads(rooms[0])
 
@@ -153,10 +159,12 @@ class Potluck():
         post_data = {
             'room_identifier': room_id
         }
-        request = requests.post(url, data=post_data)
+        request = requests.post(url, data=post_data, headers=self.extra_headers)
 
         if not request.ok:
             print "Whooops - something went wrong :("
+
+        print "'%s' has been hearted!" % room.get('topic')
 
         return
 
