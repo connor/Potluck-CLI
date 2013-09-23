@@ -26,16 +26,20 @@ class Potluck():
 
     def _get_and_set_login_file_creds(self):
         home_dir = os.path.expanduser("~")
-        
-        with open(os.path.join(home_dir, self.potluck_config_file_name)) as f:
-            content = f.readlines()
-        
-        if not len(content) is 2:
-            print "Whoah there - make a ~/.potluck file with\nyour email on the first line and your password\non the second line."
-            return;
+        content = []
+       
+        try:
+            with open(os.path.join(home_dir, self.potluck_config_file_name)) as f:
+                content = f.readlines()
+        except:
+            email = raw_input("What email address do you use for Potluck? ")
+            password = raw_input("What is your Potluck password? ")
 
-        self.auth_info['user[email]'] = content[0].rstrip('\n')
-        self.auth_info['user[password]'] = content[1]
+        if email and password:
+            # TODO: make ~/.potluck_config file and add the text to it.
+        
+        self.auth_info['user[email]'] = email if email else content[0].rstrip('\n')
+        self.auth_info['user[password]'] = password if password else content[1]
 
         return self.auth_info
 
