@@ -9,8 +9,9 @@ class Potluck():
 
     def environment(self):
         """Parse any command line arguments."""
-        parser = ArgumentParser()
-        parser.add_argument('-o', nargs='+', help="Get information for a domain name.")
+        parser = ArgumentParser(add_help=False)
+        parser.add_argument('-o', nargs='+', help="Open browser to a room.")
+        parser.add_argument('-h', nargs='+', help="Heart a room.")
         args = parser.parse_args()
         return args
 
@@ -48,12 +49,18 @@ class Potluck():
         self.extra_headers['X-Application-Name'] = "Potluck CLI, by Connor Montgomery"
 
 
+    def _login_if_needed(self):
+        if not len(self.extra_headers):
+            self.login()
+
+
     def login(self):
         auth_info = self._get_and_set_login_file_creds()
         if not auth_info:
             return
 
         request = requests.post("%s/sessions.json" % self.base_route, data=auth_info)
+
         if not request.ok:
             print "Whoah there - authentication didn't work."
             return;
@@ -131,10 +138,46 @@ class Potluck():
             print output_string
 
 
+    def heart(self, roomNumber):
+        self._login_if_needed()
+        rooms = self.get_cached_rooms_data()
+        rooms = json.loads(rooms[0])
+
+        if not len(rooms):
+            print "Whoah - no cached rooms"
+            return
+
+        roomNumber = roomNumber - 1
+        room = rooms[roomNumber]
+
+        if not room:
+            print "Something went wrong"
+            return
+
+        room_id = room.get('identifier')
+        url = "%s/stars?format=json" % self.base_route
+        post_data = {
+            'room_identifier': room_id
+        }
+        request = requests.post(url, data=post_data, headers=self.extra_headers)
+
+        if not request.ok:
+            print "Whooops - something went wrong :("
+
+        print "'%s' has been hearted!" % room.get('topic')
+
+        return
+
+
     def stir(self, env):
         if env.o:
             room_to_open = int(env.o[0])
             self.open(room_to_open)
+            return
+
+        if env.h:
+            room_to_heart = int(env.h[0])
+            self.heart(room_to_heart)
             return
     
         logged_in = self.login()
@@ -146,7 +189,6 @@ class Potluck():
                 self.print_output()
 
         else:
-            print "Whoah - something went wrong."
             return;
 
 
